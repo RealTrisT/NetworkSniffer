@@ -1,0 +1,1 @@
+void debug(unsigned char* buffer, unsigned int buffersize);
