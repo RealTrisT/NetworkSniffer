@@ -2,9 +2,10 @@
 
 #include "EthernetII/EthernetII.h"
 #include "EthernetII/EtherTypes.h"
+#include "IPv4/IPv4.h"
 
 unsigned char me[6]        = {0x88, 0x53, 0x2e, 0xaa, 0x1a, 0xc2};
-unsigned char router[6]    = {0x04, 0xF9, 0x38, 0x9A, 0x58, 0x14};
+unsigned char router[6]    = {0x64, 0x70, 0x02, 0xDA, 0x20, 0xBB};
 unsigned char broadcast[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
 #define KNRM  "\x1B[0m"
@@ -38,6 +39,8 @@ void debug(unsigned char* buffer, unsigned int buffersize){
         hdr->PrintSource(stdout);
         printf(KNRM);
 
+		printf(">");
+
         printf(destination_);
         hdr->PrintDestination(stdout);
         printf(KNRM);
@@ -47,6 +50,15 @@ void debug(unsigned char* buffer, unsigned int buffersize){
         else if(__builtin_bswap16(hdr->EtherType) == ETHERTYPE_IPv6)printf(" {IPv6}");
         else if(__builtin_bswap16(hdr->EtherType) == ETHERTYPE_ARP) printf(" {ARP} ");
         else printf(" unknwn<0x%X>", hdr->EtherType);
+
+        if(__builtin_bswap16(hdr->EtherType) == ETHERTYPE_IPv4){
+        	char srcbuff[16] = {0};
+        	char dstbuff[16] = {0};
+        	IPv4Header* iph = (IPv4Header*)(buffer+14);
+        	iph->SPrintSource(srcbuff, false);
+        	iph->SPrintDestination(dstbuff, true);
+        	printf("%s > %s", srcbuff, dstbuff);
+        }
 
         printf("\n");
 }

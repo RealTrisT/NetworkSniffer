@@ -8,4 +8,4 @@ struct macHeader{
     bool CmpDestination(unsigned char* mac);
     void PrintSource(FILE* stream);
     void PrintDestination(FILE* stream);
-};
+}__attribute__((packed));
