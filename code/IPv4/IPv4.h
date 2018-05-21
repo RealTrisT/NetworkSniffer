@@ -4,7 +4,7 @@
 struct IPv4Header{
 	unsigned char Version_IHL;			//Version: always 4
 										//Internet Header Length : size of this header in 32-bit words - minimum 5 - maximum 15
-	unsigned char DSCP_ECN;			//DSCP: Diferentiated Services Code Point : basically type of service
+	unsigned char DSCP_ECN;				//DSCP: Diferentiated Services Code Point : basically type of service
 										//ECN:  Explicit Congestion Notification
 	unsigned short TotalLength;			//Packet size in bytes of header+data
 	unsigned short Identification; 		//identifies the group of fragments of a single IP datagram
@@ -27,6 +27,7 @@ struct IPv4Header{
 	bool CmpDestination(unsigned int* ip);
 	void PrintSource(FILE* stream);
 	void PrintDestination(FILE* stream);
-	void SPrintSource(char* buffer, bool PadRight);
-	void SPrintDestination(char* buffer, bool PadRight);
+	void SPrintSource(char* buffer, bool AlignRight);
+	void SPrintDestination(char* buffer, bool AlignRight);
+	void* GetUnderlyingProtocolAddr();
 }__attribute__((packed));

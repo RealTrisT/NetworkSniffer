@@ -3,6 +3,8 @@
 #include "EthernetII/EthernetII.h"
 #include "EthernetII/EtherTypes.h"
 #include "IPv4/IPv4.h"
+#include "IPv4/IP_Protos.h"
+#include "IPv4/TCP/TCP.h"
 
 unsigned char me[6]        = {0x88, 0x53, 0x2e, 0xaa, 0x1a, 0xc2};
 unsigned char router[6]    = {0x64, 0x70, 0x02, 0xDA, 0x20, 0xBB};
@@ -58,6 +60,26 @@ void debug(unsigned char* buffer, unsigned int buffersize){
         	iph->SPrintSource(srcbuff, false);
         	iph->SPrintDestination(dstbuff, true);
         	printf("%s > %s", srcbuff, dstbuff);
+
+        	switch(iph->Protocol){
+        		case IP_PROTO_TCP:
+        			printf("   {TCP}");
+        			break;
+        		case IP_PROTO_ICMP:
+        			printf("  {ICMP}");
+        			break;
+        		case IP_PROTO_UDP:
+        			printf("   {UDP}");
+        			break;
+        		default:
+        			printf("{unknwn}");
+        			break;
+        	}
+
+        	if(iph->Protocol == IP_PROTO_TCP){
+        		TCPHeader* tcph = (TCPHeader*)iph->GetUnderlyingProtocolAddr();
+        		printf("%05d > %05d", __builtin_bswap16(tcph->Source), __builtin_bswap16(tcph->Destination));
+        	}
         }
 
         printf("\n");

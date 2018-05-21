@@ -42,11 +42,11 @@ void IPv4Header::PrintDestination(FILE* stream){
 	fprintf(stream, "%d.%d.%d.%d", Destination&0xFF, (Destination>>8)&0xFF, (Destination>>16)&0xFF, Destination>>24);
 }
 
-void IPv4Header::SPrintSource(char* buffer, bool PadRight){
+void IPv4Header::SPrintSource(char* buffer, bool AlignRight){
 	int written = snprintf(buffer, 16, "%d.%d.%d.%d", Source&0xFF, (Source>>8)&0xFF, (Source>>16)&0xFF, Source>>24);
 	
 	if(written < 15){//if doesn't fill buffer
-		if(PadRight){//if we want it to be on the right
+		if(AlignRight){//if we want it to be on the right
 			for (int i = 14; i >= (15-written); --i){		//pull buffer to the right side
 				buffer[i] = buffer[i-(15-written)];
 			}
@@ -62,11 +62,11 @@ void IPv4Header::SPrintSource(char* buffer, bool PadRight){
 	}
 }
 
-void IPv4Header::SPrintDestination(char* buffer, bool PadRight){
+void IPv4Header::SPrintDestination(char* buffer, bool AlignRight){
 	int written = snprintf(buffer, 16, "%d.%d.%d.%d", Destination&0xFF, (Destination>>8)&0xFF, (Destination>>16)&0xFF, Destination>>24);
 	
 	if(written < 15){//if doesn't fill buffer
-		if(PadRight){//if we want it to be on the right
+		if(AlignRight){//if we want it to be on the right
 			for (int i = 14; i >= (15-written); --i){		//pull buffer to the right side
 				buffer[i] = buffer[i-(15-written)];
 			}
@@ -80,4 +80,8 @@ void IPv4Header::SPrintDestination(char* buffer, bool PadRight){
 			}
 		}
 	}
+}
+
+void* IPv4Header::GetUnderlyingProtocolAddr(){
+	return (void*)(((unsigned int*)this) + GetIHL());
 }
